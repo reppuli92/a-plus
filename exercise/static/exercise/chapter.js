@@ -335,7 +335,8 @@
       return $(wrap);
     },
 
-    load: function(onlyThis) {
+    load: function(onlyThis, options) {
+      options = options || {};
       this.showLoader("load");
       var exercise = this;
 
@@ -354,11 +355,11 @@
         if (!onlyThis) exercise.chapter.nextExercise();
       } else {
         var loadUrl = this.url;
-        if (this.quiz) {
+        if (this.quiz && !options.blank) {
           // return the last submission if it exists.
           loadUrl += "&submission=true";
         }
-        if (this.autosave) {
+        if (this.autosave && !options.blank) {
           // return the active submission draft if it exists.
           loadUrl += "&draft=true";
         }
@@ -478,6 +479,12 @@
             forms.aplusAutoSave();
           }
         }
+
+        content.find("[data-aplus-reset-questionnaire]").on("click", function(event) {
+          event.preventDefault();
+          delete exercise.savedFormData;
+          exercise.load(true, { blank: true });
+        });
       }
 
       $.augmentSubmitButton(content);
