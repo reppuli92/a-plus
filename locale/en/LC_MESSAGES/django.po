@@ -2149,7 +2149,7 @@ msgstr "Invalid assignment or submitter id: {id}"
 
 #: deviations/viewbase.py
 msgid "SUCCESS_OVERRIDING_DEVIATIONS"
-msgstr "Deviations were overriden successfully."
+msgstr "Deviations were overridden successfully."
 
 #: deviations/viewbase.py
 msgid "NOTHING_REMOVED"
