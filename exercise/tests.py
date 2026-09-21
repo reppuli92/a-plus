@@ -808,6 +808,7 @@ class ExerciseTest(ExerciseTestBase):
         self.submission.grading_data = {"source": "grader"}
         self.submission.set_points(7, 10, no_penalties=True)
         self.submission.set_ready()
+        self.submission.force_exercise_points = True
         self.submission.save()
 
         self.client.login(username="testUser", password="testPassword")
@@ -824,6 +825,7 @@ class ExerciseTest(ExerciseTestBase):
 
         self.submission.refresh_from_db()
         self.assertEqual(self.submission.status, Submission.STATUS.INVALIDATED)
+        self.assertFalse(self.submission.force_exercise_points)
         self.assertEqual(self.submission.feedback, "grader feedback")
         self.assertEqual(self.submission.assistant_feedback, "assistant feedback")
         self.assertEqual(self.submission.grading_data, {"source": "grader"})

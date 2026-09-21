@@ -677,6 +677,7 @@ class Submission(SubmissionProto, models.Model):
     def set_invalidated(self):
         if self.status != self.STATUS.READY:
             raise ValueError("Only ready submissions can be invalidated")
+        self.force_exercise_points = False
         self.status = self.STATUS.INVALIDATED
         self.clear_pending()
 
