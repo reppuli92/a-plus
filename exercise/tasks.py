@@ -16,6 +16,7 @@ def regrade_exercises(self, exerciseid: int, regrade_type: str) -> None:
         return
 
     qs = (exercise.submissions
+        .exclude(status=Submission.STATUS.INVALIDATED)
         .defer("feedback", "assistant_feedback", "grading_data")
     )
 

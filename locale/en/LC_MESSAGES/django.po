@@ -4791,7 +4791,8 @@ msgstr ""
 "This is meant to be used only in situations where the assessment service has "
 "behaved incorrectly so that the grading data is incorrect or the status of "
 "the submission never became ready. Caution! Re-submitting overwrites the "
-"current grading data. "
+"current grading data. Invalidated submissions can't be regraded. Revalidate "
+"the submission to regrade it."
 
 #: exercise/templates/exercise/staff/_submission_data_modal.html
 msgid "SUBMITTED_VALUES"

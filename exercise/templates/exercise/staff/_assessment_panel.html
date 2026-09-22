@@ -89,6 +89,7 @@
 							<button
 								class="aplus-button--secondary aplus-button--sm aplus-button--left"
 								type="submit"
+								{% if submission.status == submission.STATUS.INVALIDATED %}disabled{% endif %}
 							>
 								{% translate 'REGRADE_AUTOMATICALLY' %}
 							</button><button

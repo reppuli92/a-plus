@@ -4805,7 +4805,9 @@ msgstr ""
 "Tällä painikkeella voi lähettää palautuksen uudelleen tehtäväpalveluun. "
 "Toiminto on tarkoitettu käytettäväksi, kun tehtäväpalvelu on toiminut "
 "väärin, ja arvostelu on virheellinen tai tila ei muuttunut valmiiksi. "
-"Huomaa, että vanha arvostelu korvautuu uudella."
+"Huomaa, että vanha arvostelu korvautuu uudella. Mitätöityjä palautuksia ei "
+"voi uudelleenarvioida. Poista palautuksen mitätöinti uudelleenarvioidaksesi "
+"sen."
 
 #: exercise/templates/exercise/staff/_submission_data_modal.html
 msgid "SUBMITTED_VALUES"
