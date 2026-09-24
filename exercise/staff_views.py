@@ -235,6 +235,8 @@ class InspectSubmissionView(SubmissionBaseView, BaseFormView):
         self.not_final = False
         self.not_best = False
         self.not_last = False
+        self.invalidated_replaced = False
+        is_invalidated = self.submission.status == Submission.STATUS.INVALIDATED
         for submission in self.submissions:
             format_submission(self.submission, self.pseudonymize)
             if submission.id != self.submission.id:
@@ -242,12 +244,19 @@ class InspectSubmissionView(SubmissionBaseView, BaseFormView):
                     self.not_final = True
                     # When not_final is True, the other variables are not needed. Stop the loop early.
                     break
-                if ((submission.points > self.submission.grade and submission.status != Submission.STATUS.UNOFFICIAL)
+                # An invalidated submission never determines the grade, regardless of its
+                # points, so any ready submission has replaced it.
+                if is_invalidated and submission.status == Submission.STATUS.READY:
+                    self.invalidated_replaced = True
+                    break
+                # Only ready submissions can determine the grade, matching the criterion
+                # used when the cached best/last submission is selected.
+                if ((submission.points > self.submission.grade and submission.status == Submission.STATUS.READY)
                         or (self.submission.status == Submission.STATUS.UNOFFICIAL
-                            and submission.status != Submission.STATUS.UNOFFICIAL)):
+                            and submission.status == Submission.STATUS.READY)):
                     self.not_best = True
                 if (submission.date > self.submission.submission_time
-                        and submission.status != Submission.STATUS.UNOFFICIAL):
+                        and submission.status == Submission.STATUS.READY):
                     self.not_last = True
 
         if self.exercise.grading_mode == BaseExercise.GRADING_MODE.BEST:
@@ -269,6 +278,7 @@ class InspectSubmissionView(SubmissionBaseView, BaseFormView):
             'not_final',
             'not_best',
             'not_last',
+            'invalidated_replaced',
             'grading_mode_text',
             'has_model_answers',
             'compared_submission',
@@ -295,6 +305,10 @@ class InspectSubmissionView(SubmissionBaseView, BaseFormView):
         if not (self.is_teacher or self.exercise.allow_assistant_grading):
             messages.error(self.request, _('EXERCISE_ASSISTANT_PERMISSION_NO_ASSISTANT_GRADING'))
             raise PermissionDenied()
+
+        if self.submission.status == Submission.STATUS.INVALIDATED:
+            messages.info(self.request, _('SUBMISSION_ALREADY_INVALIDATED'))
+            return self.redirect(self.submission.get_inspect_url())
 
         assistant_feedback = form.cleaned_data["assistant_feedback"]
         feedback = form.cleaned_data["feedback"]

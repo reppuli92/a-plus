@@ -840,6 +840,16 @@ class ExerciseTest(ExerciseTestBase):
         self.submission.refresh_from_db()
         self.assertEqual(self.submission.status, Submission.STATUS.INVALIDATED)
 
+        response = self.client.post(self.submission.get_url('submission-inspect'), {
+            "points": 3,
+            "feedback": "new feedback",
+            "assistant_feedback": "new assistant feedback",
+        })
+        self.assertEqual(response.status_code, 302)
+        self.submission.refresh_from_db()
+        self.assertEqual(self.submission.status, Submission.STATUS.INVALIDATED)
+        self.assertEqual(self.submission.feedback, "grader feedback")
+
         self.client.login(username="grader", password="graderPassword")
         response = self.client.post(revalidate_submission_url)
         self.assertEqual(response.status_code, 403)

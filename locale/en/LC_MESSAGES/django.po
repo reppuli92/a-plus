@@ -4983,6 +4983,10 @@ msgid "NOTE_FINAL_SUBMISSION"
 msgstr "There is another submission that is marked as final."
 
 #: exercise/templates/exercise/staff/inspect_submission.html
+msgid "NOTE_INVALIDATED_SUBMISSION_REPLACED"
+msgstr "This submission has been invalidated. Another submission determines the grade for this assignment."
+
+#: exercise/templates/exercise/staff/inspect_submission.html
 msgid "NOTE_BETTER_SUBMISSIONS"
 msgstr "Another submission determines the grade for this assignment."
 
