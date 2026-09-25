@@ -642,10 +642,14 @@ class Submission(SubmissionProto, models.Model):
         self.grade = min(self.grade,self.exercise.max_points)
 
     def set_waiting(self):
+        if self.status == self.STATUS.INVALIDATED:
+            raise ValueError("Invalidated submissions cannot be set waiting")
         self.status = self.STATUS.WAITING
         self.mark_pending()
 
     def set_ready(self, approve_unofficial=False):
+        if self.status == self.STATUS.INVALIDATED:
+            raise ValueError("Invalidated submissions cannot be set ready")
         self.grading_time = timezone.now()
         self.clear_pending()
         if self.status != self.STATUS.UNOFFICIAL or self.force_exercise_points or approve_unofficial:
@@ -667,10 +671,14 @@ class Submission(SubmissionProto, models.Model):
             retry_submissions()
 
     def set_rejected(self):
+        if self.status == self.STATUS.INVALIDATED:
+            raise ValueError("Invalidated submissions cannot be rejected")
         self.status = self.STATUS.REJECTED
         self.clear_pending()
 
     def set_error(self):
+        if self.status == self.STATUS.INVALIDATED:
+            raise ValueError("Invalidated submissions cannot be set to error")
         self.status = self.STATUS.ERROR
         self.clear_pending()
 
@@ -707,8 +715,9 @@ class Submission(SubmissionProto, models.Model):
     @property
     def is_approvable(self):
         """Is this submission late or unofficial so that it could be approved?"""
-        return (self.late_penalty_applied is not None
-            or self.status == self.STATUS.UNOFFICIAL)
+        return (self.status != self.STATUS.INVALIDATED
+            and (self.late_penalty_applied is not None
+            or self.status == self.STATUS.UNOFFICIAL))
 
     @property
     def lti_launch_id(self):

@@ -662,6 +662,10 @@ class SubmissionApprovalView(SubmissionMixin, BaseRedirectView):
     access_mode = ACCESS.GRADING
 
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if self.submission.status == Submission.STATUS.INVALIDATED:
+            messages.info(self.request, _('SUBMISSION_ALREADY_INVALIDATED'))
+            return self.redirect(self.submission.get_inspect_url())
+
         self.submission.approve_penalized_submission()
         self.submission.save()
         messages.success(self.request, format_lazy(
@@ -748,6 +752,7 @@ class SubmissionApprovalByModuleView(CourseInstanceMixin, BaseRedirectView):
 
         submissions = (self.student.userprofile.submissions
             .exclude_errors()
+            .exclude_invalidated()
             .defer_text_fields()
             .filter(**exercise_filter)
         )

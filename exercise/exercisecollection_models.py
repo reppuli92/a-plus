@@ -135,7 +135,10 @@ class ExerciseCollection(BaseExercise):
 
         current_submission.grade = new_grade
         current_submission.submission_time = timezone.now()
-        current_submission.status = Submission.STATUS.READY
+        # Keep an invalidated submission invalidated, but still refresh its data so that
+        # revalidating it later reflects the up-to-date aggregate points.
+        if current_submission.status != Submission.STATUS.INVALIDATED:
+            current_submission.status = Submission.STATUS.READY
         current_submission.submitters.set([user.userprofile])
         current_submission.grading_data = grading_data
         current_submission.feedback = feedback

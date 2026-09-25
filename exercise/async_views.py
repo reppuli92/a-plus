@@ -36,6 +36,14 @@ def _post_async_submission(request, exercise, submission, errors=None): # noqa: 
     if feedback:
         post_data['feedback'] = feedback.replace('\x00', '\\x00')
 
+    # An invalidated submission must not be silently revived by a grading
+    # result that was in flight before the invalidation happened.
+    if submission.status == submission.STATUS.INVALIDATED:
+        return {
+            "success": False,
+            "errors": ["Submission has been invalidated and cannot be graded."],
+        }
+
     # Use form to parse and validate the request.
     form = SubmissionCallbackForm(post_data)
     errors.extend(extract_form_errors(form))
