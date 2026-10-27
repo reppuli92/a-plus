@@ -18,7 +18,7 @@ def test_batch_assess(page: Page) -> None: # pylint: disable=too-many-statements
 
     cards = page.locator("div.card")
     expect(cards.filter(has_text="jututfeedback")).to_contain_text("0 / 4")
-    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 97")
+    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 107")
     expect(cards.filter(has_text="submit")).to_contain_text("0 / 750")
 
     exercise_row = (page.get_by_role("link", name="6.10.1 (Git) Hello Python!").locator("xpath=ancestor::tr"))
@@ -31,7 +31,7 @@ def test_batch_assess(page: Page) -> None: # pylint: disable=too-many-statements
 
     cards = page.locator("div.card")
     expect(cards.filter(has_text="jututfeedback")).to_contain_text("0 / 4")
-    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 97")
+    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 107")
     expect(cards.filter(has_text="submit")).to_contain_text("0 / 750")
 
     exercise_row = (page.get_by_role("link", name="6.10.1 (Git) Hello Python!").locator("xpath=ancestor::tr"))
@@ -99,7 +99,7 @@ def test_batch_assess(page: Page) -> None: # pylint: disable=too-many-statements
 
     cards = page.locator("div.card")
     expect(cards.filter(has_text="jututfeedback")).to_contain_text("0 / 4")
-    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 97")
+    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 107")
     expect(cards.filter(has_text="submit")).to_contain_text("7 / 750")
 
     exercise_row = (page.get_by_role("link", name="6.10.1 (Git) Hello Python!").locator("xpath=ancestor::tr"))
@@ -113,7 +113,7 @@ def test_batch_assess(page: Page) -> None: # pylint: disable=too-many-statements
 
     cards = page.locator("div.card")
     expect(cards.filter(has_text="jututfeedback")).to_contain_text("0 / 4")
-    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 97")
+    expect(cards.filter(has_text="questionnaire")).to_contain_text("0 / 107")
     expect(cards.filter(has_text="submit")).to_contain_text("7 / 750")
 
     exercise_row = (page.get_by_role("link", name="6.10.1 (Git) Hello Python!").locator("xpath=ancestor::tr"))
